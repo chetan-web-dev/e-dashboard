@@ -1,4 +1,4 @@
-<h5>MongoDB Express React NodeJS (MERN) Reference Implementation</h5>
+<h1>MongoDB Express React NodeJS (MERN) Reference Implementation</h1>
 This is an example implementation of a e-dashboard application using the Express, Node.JS, React and MongoDB (MERN) </br>
 Following technologies are used: <br>
 
@@ -14,7 +14,7 @@ Using MongoDB: 6.0.4 (Compass tool or Atlas account) </br>
 #Used mongoose 7.5.2 package (MongoDB) <br>
 //Commpass or MongoDB shell create database <br>
 use e-commerce <br>
-Database name: e-commerce
+Database name: e-commerce (DB collections are included)
 
 <h2>Backend</h2>
 mkdir e-dashboard <br>
