@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "653d6193bb9161dbf2252097"
+  },
+  "name": "MI 11",
+  "price": "100",
+  "company": "MI",
+  "category": "mobile",
+  "thumbnail": [],
+  "images": [],
+  "createdAt": {
+    "$date": "2023-09-28T19:31:31.000Z"
+  },
+  "createdBy": {
+    "$oid": "653d6178bb9161dbf2252093"
+  },
+  "__v": 0
+}]

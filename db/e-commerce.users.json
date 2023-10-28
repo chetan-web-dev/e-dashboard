@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "653d6178bb9161dbf2252093"
+  },
+  "name": "Admin",
+  "email": "admin@gmail.com",
+  "password": "admin@123",
+  "createdAt": {
+    "$date": "2023-10-28T19:31:04.953Z"
+  },
+  "__v": 0
+}]
