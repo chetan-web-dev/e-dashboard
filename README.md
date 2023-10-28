@@ -1,4 +1,4 @@
-<h2>MongoDB Express NodeJs e-dashbaord implementation</h2>
+<h5>MongoDB Express React NodeJS (MERN) Reference Implementation</h5>
 This is a demo implementation of e-dashboard application using Express, Node Js React and MongoDB. </br>
 Following technologies are used: <br>
 
