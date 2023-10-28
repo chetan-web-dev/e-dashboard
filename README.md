@@ -10,8 +10,8 @@ Following technologies are used: <br>
 Node v18.8.0 (Tested with) </br>
 Using MongoDB: 6.0.4 (Compass tool or Atlas account) </br>
 
-//Commpass or MongoDB shell create database <br>
 #Used mongoose 7.5.2 package (MongoDB) <br>
+//Commpass or MongoDB shell create database <br>
 use e-commerce <br>
 Database name: e-commerce
 
