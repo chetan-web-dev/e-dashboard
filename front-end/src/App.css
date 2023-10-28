@@ -1,0 +1,86 @@
+/*.nav-ul li{
+  display: inline-block;
+  padding: 10px;
+}
+
+.nav-ul li a {
+  color: #fff;
+  padding: 5px;
+  text-decoration: none;
+}*/
+.bg-skyblue{
+  background-color: skyblue !important;
+}
+.cutom-navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  background-color: skyblue !important;
+}
+/* .footer{
+  position: absolute;
+  bottom: 0px;
+  text-align: center;
+  background-color: skyblue;
+  width: 100%;
+  padding: 0px;
+} */
+.footer{
+  background-color: skyblue;
+}
+.logoSection img{
+  /* width: 32px; */
+  width: auto;
+  /* border-radius: 89%; */
+  height: 45px;
+}
+/*.nav-ul {
+  padding: 0px;
+  margin: 0px;
+  background-color: skyblue;
+}*/
+/*.SignUp{
+  margin-left: 30%;
+}
+.inputBox{
+  display: block;
+  margin: 25px;
+  padding: 7px;
+  width: 300px;
+  border: 1px solid skyblue;
+}*/
+.invalid-input {
+  color: red;
+}
+
+label.mandatory::after {
+	color: red;
+	content: ' *';
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
