@@ -1,0 +1,9 @@
+1. npm init //Create package.json file.
+2. npm i express //For api routes
+3. npm i mongoose //For Mongodb
+4. npm i nodemon
+5. npm i cors //Cross domain 
+6. npm i jsonwebtoken //JWT Token
+7. npm i dotenv
+
+React and node JS project in Hindi #35 Verify Jwt Auth Token in Node js
