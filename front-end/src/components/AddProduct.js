@@ -19,7 +19,7 @@ const AddProduct =()=>{
             return false;
         }        
         const createdBy = JSON.parse(localStorage.getItem('user'))._id;
-        let result = await fetch(`${process.env.REACT_APP_API_ENDPOINT}product/add`,{
+        let result = await fetch(`${process.env.REACT_APP_API_ENDPOINT}api/v1/product/add`,{
             method:'post',
             body:JSON.stringify({ name,price,category,company,createdBy }),
             headers:{

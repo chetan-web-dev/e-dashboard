@@ -6,7 +6,7 @@ const Products = () => {
     const [authError,setAuthError] = useState("");
 
     const getProducts = async () => {
-        let result = await fetch(`${process.env.REACT_APP_API_ENDPOINT}products`, {
+        let result = await fetch(`${process.env.REACT_APP_API_ENDPOINT}api/v1/products`, {
             headers: {
                 authorization: JSON.parse(`"${localStorage.getItem('token')}"`)
             }
