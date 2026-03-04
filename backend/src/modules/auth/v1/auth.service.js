@@ -4,6 +4,9 @@ const { hashToken } = require('../../../utils/token.util');
 const JWT = require('jsonwebtoken');
 
 const AuthService = {    
+    register: ()=>{
+        return true;
+    },
     login: async (data) =>{
         try {
             const { email, password } = data;            
@@ -28,12 +31,9 @@ const AuthService = {
             }
             
             const accessToken = await AuthService.generateAccessToken(user);
-            //console.log(accessToken)
             const refreshToken = await AuthService.generateRefreshToken(user);
-            //console.log(refreshToken)
-            //const hashedToken = hashToken(refreshToken);
-            const hashedToken = refreshToken;
-
+            const hashedToken = hashToken(refreshToken);            
+            
             await Auth.findByIdAndUpdate(
                 user._id,
                 {
@@ -51,7 +51,7 @@ const AuthService = {
             return {
                 id: user._id,
                 email: user.email,
-                refreshToken: user.refreshToken,
+                refreshToken: refreshToken,
                 accessToken
             }
         } catch (error) {
@@ -74,9 +74,105 @@ const AuthService = {
             { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
         )
     },
-    register: ()=>{
-        return true;
-    }
+    refreshToken: async (token)=> {
+        try {
+            const decoded = JWT.verify(token, process.env.JWT_REFRESH_SECRET);
+            const hashed = hashToken(token);
+
+            const user = await Auth.findOne({
+                _id: decoded.uid,
+                refreshToken: hashed
+            });
+
+            if (!user) {
+                const err = new Error("Invalid refresh token test");
+                err.status = 401;
+                throw err;
+            }
+
+            const newAccessToken = await AuthService.generateAccessToken(user);            
+            const refreshToken = await AuthService.generateRefreshToken(user);
+            const hashedToken = hashToken(refreshToken); 
+
+            user.refreshToken = hashedToken;
+            await user.save();
+
+            return {
+                accessToken: newAccessToken,
+                refreshToken: refreshToken
+            };
+        } catch (error) {        
+            if (error.name === "TokenExpiredError") {
+                error.status = 401;
+            }
+            throw error;
+        }            
+    },
+    clearUserToken: async (hashed)=> {
+        try {
+            const result = await Auth.updateOne(
+                { refreshToken: hashed },
+                { $unset: { refreshToken: 1 } }
+            );    
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    updateProfile: async (userId, data)=> {
+        try {
+            console.log(id);
+            console.log(data);
+
+            // Validate ObjectId
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                const err = new Error('Invalid user id');
+                err.statusCode = 400;
+                throw err;
+            }
+
+            // Restrict Sensitive Fields
+            const restrictedFields = [
+                'password',
+                'role',
+                'refreshToken',
+                'email' // handled separately
+            ];
+
+            restrictedFields.forEach(field => {
+                if (updateData[field] !== undefined) {
+                    delete updateData[field];
+                }
+            });
+
+            // If no valid fields remain
+            if (!Object.keys(updateData).length) {
+                const err = new Error('No valid fields provided for update');
+                err.statusCode = 400;
+                throw err;
+            }
+
+            // Update user dynamically
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { $set: updateData },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+            if (!updatedUser) {
+                const err = new Error('User not found');
+                err.statusCode = 404;
+                throw err;
+            }
+            return updatedUser;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }  
+      
 }
 
 module.exports = AuthService;

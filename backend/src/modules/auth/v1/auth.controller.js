@@ -1,7 +1,7 @@
 const AuthService = require('./auth.service');
-const { formatError } = require('../../../utils/errorFormatter');
+const { hashToken } = require('../../../utils/token.util');
 
-async function login(req, resp) {
+async function login(req, resp, next) {
     const resObj = { success: false, message: null, data: null, token: null };
     try {
         const user = await AuthService.login(req.body);
@@ -21,10 +21,61 @@ async function login(req, resp) {
 
         return resp.status(200).json(resObj)        
     } catch (error) {
-        return resp.status(error.status || 500).json({
-            success: false,
-            message: formatError(error)
+        next(error);
+    }
+}
+
+async function logout(req, resp, next) {
+    try {
+        const token = req.cookies.refreshToken;
+        if (!token) {
+            return resp.status(200).json({
+                success: true,
+                message: "Already logged out"
+            });
+        }
+
+        const hashedToken = hashToken(token);
+        const result = AuthService.clearUserToken(hashedToken);
+        resp.clearCookie("refreshToken");
+
+        return resp.status(200).json({
+            success: true,
+            message: (await result).matchedCount === 1
+                        ? "Logged out successfully"
+                        : "Already logged out"
         });
+
+    } catch (error) {
+        next();
+    }
+};
+
+async function refreshToken(req, resp, next) {
+    const resObj = { success: false, message: null, token: null };
+
+    try {
+        const token = req.cookies.refreshToken;
+        if (!token) {
+            resObj.message = 'No refresh token provided';
+            return resp.status(401).json(resObj)   
+        }
+        
+        const { accessToken, refreshToken } = await AuthService.refreshToken(token);        
+        resObj.success = true;
+        resObj.message = 'New token generated successfully';
+        resObj.token = accessToken;                
+
+        resp.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        return resp.status(200).json(resObj)     
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -32,6 +83,14 @@ async function updateProfile(req, resp) {
     const response = { status: false, error: true, result: null, requestBody: null, message: null };
     let user = null;
     try {
+        const authId = req.params.id;
+        console.log(`AuthId:`,authId);
+        const updatedData = req.body;
+
+        const result = AuthService.updateProfile(authId, updatedData);
+        console.log(result)
+
+
         if (req.body.email && req.body.password) {
             user = await User.findOne(req.body).select("-password");
             response.message = 'No user found';
@@ -52,4 +111,9 @@ async function updateProfile(req, resp) {
     resp.send({ response });
 }
 
-module.exports = { login, updateProfile  }
+module.exports = { 
+    login, 
+    logout,
+    refreshToken,
+    updateProfile    
+}
